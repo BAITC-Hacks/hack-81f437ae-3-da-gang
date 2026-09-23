@@ -1,7 +1,8 @@
 import { createServer } from 'node:http';
 import { readFile } from 'node:fs/promises';
 import { fileURLToPath, pathToFileURL } from 'node:url';
-import { resolve } from 'node:path';
+import { resolve, dirname } from 'node:path';
+import { register } from './domain/registration.mjs';
 import { createStore } from './storage/json-store.mjs';
 import { DomainError, createTask, updateTask, publishTask, addProposal, selectTeam, present } from './domain/tasks.mjs';
 
@@ -29,6 +30,7 @@ async function body(req) {
 
 export function makeServer({ dataFile = resolve(root, 'data/tasks.json') } = {}) {
   const store = createStore(dataFile);
+  const users = createStore(resolve(dirname(dataFile), 'users.json'));
   return createServer(async (req, res) => {
     function json(status, value) {
       res.writeHead(status, { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store' });
@@ -36,6 +38,9 @@ export function makeServer({ dataFile = resolve(root, 'data/tasks.json') } = {})
     }
     try {
       const url = new URL(req.url, 'http://localhost');
+      if (req.method === 'POST' && url.pathname === '/api/register') {
+        return json(201, await register(await body(req), users));
+      }
       if (req.method === 'GET' && assets[url.pathname]) {
         const [name, mime] = assets[url.pathname];
         const content = await readFile(resolve(root, 'public', name));

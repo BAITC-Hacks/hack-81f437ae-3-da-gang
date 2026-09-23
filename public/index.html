@@ -11,7 +11,7 @@
   <header><a class="brand" href="/">Task<span>Up</span></a><span>AI SANA / 3 DA GANG</span><span class="demo">Локальный прототип</span></header>
   <main>
     <section class="hero"><p class="eyebrow">БИЗНЕС × СТУДЕНЧЕСКИЕ КОМАНДЫ</p><h1>Хорошая задача.<br><span>Сильная команда.</span></h1><p>Превратите идею в понятный проект. Улучшайте описание, поднимайтесь в каталоге и выбирайте команду по её предложению.</p></section>
-    <nav aria-label="Режим работы"><button id="business-tab" class="active" aria-pressed="true">Бизнес</button><button id="catalog-tab" aria-pressed="false">Каталог для команд</button></nav>
+    <nav aria-label="Режим работы"><button id="business-tab" class="active" aria-pressed="true">Бизнес</button><button id="catalog-tab" aria-pressed="false">Каталог для команд</button><button id="registration-tab" aria-pressed="false">Регистрация</button></nav>
     <p id="notice" role="status" aria-live="polite"></p>
     <section id="business">
       <div class="columns">
@@ -30,6 +30,28 @@
       </div>
     </section>
     <section id="catalog" hidden><h2>Открытый каталог</h2><p class="muted">Чем полнее описание, тем выше задача. Команда подаёт отклик, бизнес делает выбор.</p><div id="catalog-list" class="catalog-grid"></div></section>
+    <section id="registration" hidden>
+      <div class="registration-layout">
+        <aside class="registration-intro"><p class="eyebrow">ПРИСОЕДИНЯЙТЕСЬ К TASKUP</p><h2>От знакомства<br>к первому проекту.</h2><p>Расскажите, кто вы, и создайте профиль для работы с задачами.</p><ul><li><strong>Бизнес</strong><br>Описывайте задачи и находите команды.</li><li><strong>Студенческая команда</strong><br>Выбирайте реальные проекты и предлагайте решения.</li></ul></aside>
+        <article class="panel">
+          <div id="registration-fields"><h2>Создать аккаунт</h2><p class="muted">Уже есть идея? Начните с короткого знакомства.</p>
+            <form id="registration-form">
+              <fieldset class="role-picker"><legend>Ваша роль</legend><label><input type="radio" name="role" value="business" checked> Бизнес</label><label><input type="radio" name="role" value="student"> Студенческая команда</label></fieldset>
+              <label>Ваше имя<input name="name" autocomplete="name" required minlength="2" maxlength="100" placeholder="Назар"></label>
+              <label><span id="organization-label">Название компании</span><input name="organization" autocomplete="organization" required minlength="2" maxlength="160" placeholder="Название вашей компании"></label>
+              <label>Email<input type="email" name="email" autocomplete="email" required maxlength="254" placeholder="you@example.com"></label>
+              <label>Пароль<input type="password" name="password" autocomplete="new-password" required minlength="8" maxlength="128" aria-describedby="password-hint"></label>
+              <p id="password-hint" class="muted">От 8 до 128 символов.</p>
+              <label>Повторите пароль<input type="password" name="passwordConfirm" autocomplete="new-password" required minlength="8" maxlength="128"></label>
+              <label class="show-password"><input id="show-password" type="checkbox"> Показать пароли</label>
+              <p id="registration-message" role="status" aria-live="polite"></p>
+              <button type="submit" class="registration-submit">Зарегистрироваться</button>
+            </form>
+          </div>
+          <div id="registration-success" hidden><span class="badge">Профиль создан</span><h2>Добро пожаловать!</h2><p id="registered-summary"></p><p class="muted">Данные сохранены. Вход в аккаунт будет добавлен позже; пока можно продолжить в демо-режиме.</p><button id="registration-continue">Продолжить</button><button id="register-another" class="secondary">Создать ещё профиль</button></div>
+        </article>
+      </div>
+    </section>
   </main>
   <footer>Прототип без авторизации · рейтинг оценивает полноту описания · команды выбирает бизнес</footer>
 </body>

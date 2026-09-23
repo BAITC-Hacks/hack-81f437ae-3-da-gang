@@ -42,4 +42,19 @@ summary { cursor: pointer; color: #5143c1; font-weight: 600; }
 .empty { padding: 30px; border: 1px dashed #c6cfdd; border-radius: 16px; }
 footer { color: #617086; font-size: 12px; padding-top: 40px; padding-bottom: 36px; }
 [hidden] { display: none !important; }
+nav { flex-wrap: wrap; }
+.registration-layout { display: grid; grid-template-columns: 1fr 1.1fr; gap: 48px; max-width: 960px; margin: 30px auto; align-items: start; }
+.registration-intro { padding: 24px 0; color: #58677b; line-height: 1.7; }
+.registration-intro h2 { color: #1c293b; font-size: 36px; line-height: 1.2; letter-spacing: -1px; }
+.registration-intro ul { padding-left: 20px; }
+.registration-intro li { margin: 24px 0; }
+.role-picker { border: 1px solid #dce2ee; border-radius: 12px; padding: 8px 14px; margin: 20px 0; }
+.role-picker legend { font-size: 14px; font-weight: 600; }
+.role-picker label, .show-password { display: flex; gap: 10px; align-items: center; }
+.role-picker input, .show-password input { width: auto; margin: 0; accent-color: #6254dc; }
+.registration-submit { width: 100%; }
+#registration-success h2 { margin-top: 22px; }
+#registration-success p { line-height: 1.7; overflow-wrap: anywhere; }
+#registration-success button { margin: 6px 4px 6px 0; }
+@media (max-width: 760px) { .registration-layout { grid-template-columns: 1fr; gap: 12px; } }
 @media (max-width: 760px) { header, main, footer { padding-left: 18px; padding-right: 18px; } .columns, .catalog-grid { grid-template-columns: 1fr; } header > span:not(.demo) { display: none; } .panel { padding: 20px; } nav button { font-size: 14px; } }

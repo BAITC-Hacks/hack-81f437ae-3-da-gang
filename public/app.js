@@ -43,9 +43,9 @@ async function refresh() {
 
 function reset() { editingId = null; form.reset(); $('#editor-title').textContent = 'Новая задача'; }
 $('#reset-form').addEventListener('click', reset);
-for (const mode of ['business', 'catalog']) {
+for (const mode of ['business', 'catalog', 'registration']) {
   $(`#${mode}-tab`).addEventListener('click', () => {
-    for (const name of ['business', 'catalog']) {
+    for (const name of ['business', 'catalog', 'registration']) {
       $(`#${name}`).hidden = name !== mode;
       $(`#${name}-tab`).classList.toggle('active', name === mode);
       $(`#${name}-tab`).setAttribute('aria-pressed', String(name === mode));
@@ -102,3 +102,48 @@ document.addEventListener('submit', async event => {
 });
 
 refresh().catch(error => notice(`Не удалось загрузить задачи: ${error.message}`, true));
+
+const registrationForm = $('#registration-form');
+let registeredRole = 'business';
+registrationForm.addEventListener('change', () => {
+  const student = registrationForm.elements.role.value === 'student';
+  $('#organization-label').textContent = student ? 'Название команды' : 'Название компании';
+  registrationForm.elements.organization.placeholder = student ? 'Например: 3 da gang' : 'Название вашей компании';
+  for (const name of ['password', 'passwordConfirm']) {
+    registrationForm.elements[name].type = $('#show-password').checked ? 'text' : 'password';
+  }
+});
+registrationForm.addEventListener('submit', async event => {
+  event.preventDefault();
+  const message = $('#registration-message');
+  const data = Object.fromEntries(new FormData(registrationForm));
+  message.className = 'error';
+  if (data.password !== data.passwordConfirm) {
+    message.textContent = 'Пароли не совпадают.';
+    registrationForm.elements.passwordConfirm.focus();
+    return;
+  }
+  const button = registrationForm.querySelector('[type="submit"]');
+  button.disabled = true;
+  button.textContent = 'Создаём аккаунт…';
+  message.textContent = '';
+  try {
+    const response = await fetch('/api/register', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) });
+    const user = await response.json();
+    if (!response.ok) throw new Error(user.error || 'Не удалось зарегистрироваться.');
+    registeredRole = user.role;
+    $('#registered-summary').textContent = `${user.name}, ваш профиль ${user.role === 'business' ? 'бизнеса' : 'команды'} «${user.organization}» зарегистрирован на ${user.email}.`;
+    registrationForm.reset();
+    registrationForm.dispatchEvent(new Event('change'));
+    $('#registration-fields').hidden = true;
+    $('#registration-success').hidden = false;
+    $('#registration-continue').focus();
+  } catch (error) { message.textContent = error.message; }
+  finally { button.disabled = false; button.textContent = 'Зарегистрироваться'; }
+});
+$('#registration-continue').addEventListener('click', () => $(`#${registeredRole === 'business' ? 'business' : 'catalog'}-tab`).click());
+$('#register-another').addEventListener('click', () => {
+  $('#registration-fields').hidden = false;
+  $('#registration-success').hidden = true;
+  registrationForm.elements.name.focus();
+});
